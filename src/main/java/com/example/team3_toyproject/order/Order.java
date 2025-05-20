@@ -6,4 +6,5 @@ import jakarta.persistence.Entity;
 
 public class Order {
     private String orderId;
+
 }
