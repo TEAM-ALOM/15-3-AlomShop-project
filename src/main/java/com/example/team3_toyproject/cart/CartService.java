@@ -83,7 +83,7 @@ public class CartService {
 
     }
 
-    public CartResponse getCart(Long userId) {
+    public CartResponse getCart(Long userId, Long productId, Long categoryId) {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("그런 유저 없음"));
@@ -92,6 +92,8 @@ public class CartService {
                 .orElseThrow(() -> new RuntimeException("카트 생성 안됨"));
 
         List<CartItemResponse> itemResponses = cart.getItems().stream()
+                .filter(item -> productId == null || item.getProduct().getId().equals(productId))
+                .filter(item -> categoryId == null || item.getProduct().getCategory().getId().equals(categoryId))
                 .map(item -> new CartItemResponse(
                         item.getProduct().getId(),
                         //item.getProduct().getPrice(),

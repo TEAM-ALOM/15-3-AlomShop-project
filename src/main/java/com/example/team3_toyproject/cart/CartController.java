@@ -29,21 +29,20 @@ public class CartController {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("그런 유저 없음"));
 
-        Long userId = user.getId();
-        CartResponse response = cartService.addProductToCart(userId, request.getProductId());
+        CartResponse response = cartService.addProductToCart(user.getId(), request.getProductId());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping
-    public ResponseEntity<CartResponse> getCart(@AuthenticationPrincipal UserDetails userDetails){
+    public ResponseEntity<CartResponse> getCart(@AuthenticationPrincipal UserDetails userDetails,
+                                                @RequestParam(required = false) Long productId,
+                                                @RequestParam(required = false) Long categoryId){
         String username = userDetails.getUsername();
 
         User user = userRepository.findByUsername(username)
                 .orElseThrow(()-> new RuntimeException("그런 유저 없음"));
 
-        Long userId = user.getId();
-
-        CartResponse response = cartService.getCart(userId);
+        CartResponse response = cartService.getCart(user.getId(), productId, categoryId);
         return ResponseEntity.ok(response);
     }
 
